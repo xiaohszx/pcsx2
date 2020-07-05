@@ -170,12 +170,6 @@
     <ClInclude Include="..\Mem_Transmit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\PS2Edefs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\PS2Etypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\rasterfont.h">
       <Filter>Header Files</Filter>
     </ClInclude>

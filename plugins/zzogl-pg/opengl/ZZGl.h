@@ -20,8 +20,7 @@
 #ifndef ZZGL_H_INCLUDED
 #define ZZGL_H_INCLUDED
 
-#include "PS2Etypes.h"
-#include "PS2Edefs.h"
+#include "Pcsx2Defs.h"
 
 // Need this before gl.h
 #ifdef _WIN32

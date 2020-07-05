@@ -240,7 +240,7 @@ u32 g_pageTable8[64][128];
 u32 g_pageTable4[128][128];
 
 BLOCK m_Blocks[0x40]; // do so blocks are indexable
-static PCSX2_ALIGNED16(u32 tempblock[64]);
+static u32 tempblock[64] __aligned16;
 
 #define DSTPSM gs.dstbuf.psm
 

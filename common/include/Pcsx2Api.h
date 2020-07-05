@@ -17,8 +17,6 @@
 #ifndef __PCSX2API_H__
 #define __PCSX2API_H__
 
-// Note; this header is experimental, and will be a shifting target. Only use this if you are willing to repeatedly fix breakage.
-
 /*
  *  Based on PS2E Definitions by
 	   linuzappz@hotmail.com,
@@ -44,18 +42,6 @@ EXPORT_C(u32)
 PS2EgetLibVersion2(u32 type);
 EXPORT_C(char *)
 PS2EgetLibName(void);
-
-// Extended functions.
-
-// allows the plugin to see the whole configuration when started up.
-// Intended for them to get the ini and plugin paths, but could allow for other things as well.
-EXPORT_C_(void)
-PS2EpassConfig(PcsxConfig Config);
-
-// Alternately, this function serves the same purpose, but would work for emulators outside
-// of pcsx2.
-EXPORT_C_(void)
-PS2EpassIniPath(const char *path);
 
 // PS2EgetLibType returns (may be OR'd)
 enum {
@@ -93,14 +79,5 @@ typedef struct _GSdriverInfo
     char name[8];
     void *common;
 } GSdriverInfo;
-
-#ifdef _MSC_VER
-typedef struct _winInfo
-{ // unsupported values must be set to zero
-    HWND hWnd;
-    HMENU hMenu;
-    HWND hStatusWnd;
-} winInfo;
-#endif
 
 #endif //  __PCSX2API_H__

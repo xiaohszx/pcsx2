@@ -20,7 +20,7 @@
 #include "GS.h"
 #include "Mem.h"
 #include "Regs.h"
-#include "PS2Etypes.h"
+#include "Pcsx2Defs.h"
 
 #include "targets.h"
 #include "ZZoglVB.h"

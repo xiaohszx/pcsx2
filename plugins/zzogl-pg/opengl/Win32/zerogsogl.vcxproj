@@ -208,8 +208,6 @@
     <ClInclude Include="..\Mem.h" />
     <ClInclude Include="..\Mem_Swizzle.h" />
     <ClInclude Include="..\Mem_Transmit.h" />
-    <ClInclude Include="..\PS2Edefs.h" />
-    <ClInclude Include="..\PS2Etypes.h" />
     <ClInclude Include="..\rasterfont.h" />
     <ClInclude Include="..\Regs.h" />
     <ClInclude Include="..\Profile.h" />

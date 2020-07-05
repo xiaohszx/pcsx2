@@ -64,10 +64,6 @@ typedef unsigned __int64 u64;
 
 typedef unsigned int uint;
 
-#define PCSX2_ALIGNED(alig,x) __declspec(align(alig)) x
-#define PCSX2_ALIGNED16(x) __declspec(align(16)) x
-#define PCSX2_ALIGNED16_DECL(x) __declspec(align(16)) x
-
 #else // _MSC_VER
 
 #ifdef __linux__
@@ -112,11 +108,6 @@ typedef unsigned int uint;
 #define __forceinline __attribute__((always_inline,unused))
 
 #endif  // __linux__
-
-#define PCSX2_ALIGNED(alig,x) x __attribute((aligned(alig)))
-#define PCSX2_ALIGNED16(x) x __attribute((aligned(16)))
-
-#define PCSX2_ALIGNED16_DECL(x) x
 
 #endif // _MSC_VER
 

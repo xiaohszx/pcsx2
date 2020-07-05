@@ -346,8 +346,8 @@ extern "C" void __fastcall WriteCLUT_T32_I4_CSM1_sse2(u32* vm, u32* clut)
 #if defined(_MSC_VER)
 
 extern "C" {
-PCSX2_ALIGNED16(int s_clut16mask2[4]) = { 0x0000ffff, 0x0000ffff, 0x0000ffff, 0x0000ffff };
-PCSX2_ALIGNED16(int s_clut16mask[8]) = { 0xffff0000, 0xffff0000, 0xffff0000, 0xffff0000,
+int s_clut16mask2[4] __aligned16 = { 0x0000ffff, 0x0000ffff, 0x0000ffff, 0x0000ffff };
+int s_clut16mask[8] __aligned16 = { 0xffff0000, 0xffff0000, 0xffff0000, 0xffff0000,
 										0x0000ffff, 0x0000ffff, 0x0000ffff, 0x0000ffff};
 }
 

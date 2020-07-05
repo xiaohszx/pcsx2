@@ -327,7 +327,7 @@ void recMOVZtemp_const()
 	g_cpuConstRegs[_Rd_].UD[0] = g_cpuConstRegs[_Rs_].UD[0];
 }
 
-//static PCSX2_ALIGNED16(u32 s_zero[4]) = {0,0,0xffffffff, 0xffffffff};
+//static u32 s_zero[4] __aligned16 = {0,0,0xffffffff, 0xffffffff};
 
 void recMOVZtemp_consts(int info)
 {

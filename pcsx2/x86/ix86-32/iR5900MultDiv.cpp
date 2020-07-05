@@ -555,7 +555,7 @@ void recMADD()
 	xMOV(ptr[&cpuRegs.HI.UL[1]], edx);
 }
 
-//static PCSX2_ALIGNED16(u32 s_MaddMask[]) = { 0x80000000, 0, 0x80000000, 0 };
+//static u32 s_MaddMask[] __aligned16 = { 0x80000000, 0, 0x80000000, 0 };
 
 void recMADDU()
 {
@@ -693,7 +693,7 @@ void recMADD1()
 	xMOV(ptr[&cpuRegs.HI.UL[3]], edx);
 }
 
-//static PCSX2_ALIGNED16(u32 s_MaddMask[]) = { 0x80000000, 0, 0x80000000, 0 };
+//static Pu32 s_MaddMask[] __aligned16 = { 0x80000000, 0, 0x80000000, 0 };
 
 void recMADDU1()
 {

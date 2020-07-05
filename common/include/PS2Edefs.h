@@ -26,7 +26,6 @@
 
 /*
  Notes:
- * Since this is still beta things may change.
 
  * OSflags:
 	__linux__ (linux OS)
@@ -268,7 +267,7 @@ s32 CALLBACK GStest();
 
 #endif
 
-/* PAD plugin API -=[ OBSOLETE ]=- */
+/* PAD plugin API */
 
 // if this file is included with this define
 // the next api will not be skipped by the compiler

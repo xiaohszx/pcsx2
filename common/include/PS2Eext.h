@@ -44,7 +44,6 @@
 #endif
 
 #include <PluginCompatibility.h>
-//#include "PS2Edefs.h"
 
 #if !defined(_MSC_VER) || !defined(UNICODE)
 static void SysMessage(const char *fmt, ...);

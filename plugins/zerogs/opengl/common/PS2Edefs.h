@@ -243,9 +243,6 @@ int CALLBACK GSsetupRecording(int start, void* pData);
 void CALLBACK GSreset();
 void CALLBACK GSwriteCSR(u32 value);
 void CALLBACK GSgetDriverInfo(GSdriverInfo *info);
-#ifdef _WIN32
-s32  CALLBACK GSsetWindowInfo(winInfo *info);
-#endif
 s32  CALLBACK GSfreeze(int mode, freezeData *data);
 void CALLBACK GSconfigure();
 void CALLBACK GSabout();
@@ -528,9 +525,6 @@ typedef int (CALLBACK* _GSsetupRecording)(int, void*);
 typedef void (CALLBACK* _GSreset)();
 typedef void (CALLBACK* _GSwriteCSR)(u32 value);
 typedef void (CALLBACK* _GSgetDriverInfo)(GSdriverInfo *info);
-#ifdef _WINDOWS_
-typedef s32  (CALLBACK* _GSsetWindowInfo)(winInfo *info);
-#endif
 typedef void (CALLBACK* _GSmakeSnapshot)(const char *path);
 typedef void (CALLBACK* _GSmakeSnapshot2)(const char *path, int*, int);
 typedef s32  (CALLBACK* _GSfreeze)(int mode, freezeData *data);
@@ -714,9 +708,6 @@ extern _GSsetupRecording GSsetupRecording;
 extern _GSreset		   GSreset;
 extern _GSwriteCSR		   GSwriteCSR;
 extern _GSgetDriverInfo   GSgetDriverInfo;
-#ifdef _WINDOWS_
-extern _GSsetWindowInfo   GSsetWindowInfo;
-#endif
 extern _GSfreeze          GSfreeze;
 extern _GSconfigure       GSconfigure;
 extern _GStest            GStest;

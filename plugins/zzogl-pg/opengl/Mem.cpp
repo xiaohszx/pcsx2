@@ -30,7 +30,7 @@
 
 BLOCK m_Blocks[0x40]; // do so blocks are indexable
 
-PCSX2_ALIGNED16(u32 tempblock[64]);
+u32 tempblock[64] __aligned16;
 
 // Add a bunch of local variables that used to be in the TransferHostLocal
 // functions, in order to de-macro the TransmitHostLocal macros.

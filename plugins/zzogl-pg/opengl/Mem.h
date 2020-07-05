@@ -76,7 +76,7 @@ struct TransferData
 };
 
 #ifdef ZZNORMAL_MEMORY
-extern PCSX2_ALIGNED16(u32 tempblock[64]);
+extern u32 tempblock[64] __aligned16;
 
 struct TransferFuncts
 {
