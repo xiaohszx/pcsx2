@@ -209,7 +209,6 @@ if(Windows)
         )
 else()
     LIST(APPEND GSdxSources
-        Window/GSLinuxDialog.cpp
         Window/GSwxDialog.cpp
         Window/GSWndEGL.cpp
         )
