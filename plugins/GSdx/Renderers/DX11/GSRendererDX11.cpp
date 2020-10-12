@@ -212,23 +212,28 @@ void GSRendererDX11::EmulateTextureShuffleAndFbmask()
 	// 2. FB copy is slow, especially on triangle primitives which is unplayable with some games.
 	// 3. SW blending isn't implemented yet.
 	bool enable_fbmask_emulation = false;
+
+	// FIXME: Remove this when D3D supports sw blending.
+	// Both Genji and Destroy All Humans break with fbmask emulation enabled,
+	// in the case of Genji the fbmask draw itself is good but the draw afterwards requires sw blending with no primitive overlap,
+	// Destroy All Humans on the other hand does SW fbmask which requires sw blending.
+	const bool needs_sw_blend = m_game.title == CRC::DestroyAllHumans || m_game.title == CRC::Genji;
+	// END OF FIXME
+
 	switch (m_sw_blending)
 	{
 		case ACC_BLEND_HIGH_D3D11:
-			// Fully enable Fbmask emulation like on opengl, note misses sw blending to work as opengl on some games (Genji).
-			// Debug
-			enable_fbmask_emulation = true;
+			// Fully enable Fbmask emulation. Slowest.
+			enable_fbmask_emulation = !needs_sw_blend;
 			break;
 		case ACC_BLEND_MEDIUM_D3D11:
-			// Enable Fbmask emulation excluding triangle class because it is quite slow.
-			// Exclude 0x80000000 because Genji needs sw blending, otherwise it breaks some effects.
-			enable_fbmask_emulation = ((m_vt.m_primclass != GS_TRIANGLE_CLASS) && (m_context->FRAME.FBMSK != 0x80000000));
+			// Enable Fbmask emulation excluding triangle class because it's quite slow.
+			enable_fbmask_emulation = !needs_sw_blend && (m_vt.m_primclass != GS_TRIANGLE_CLASS);
 			break;
 		case ACC_BLEND_BASIC_D3D11:
-			// Enable Fbmask emulation excluding triangle class because it is quite slow.
-			// Exclude 0x80000000 because Genji needs sw blending, otherwise it breaks some effects.
-			// Also exclude fbmask emulation on texture shuffle just in case, it is probably safe tho.
-			enable_fbmask_emulation = (!m_texture_shuffle && (m_vt.m_primclass != GS_TRIANGLE_CLASS) && (m_context->FRAME.FBMSK != 0x80000000));
+			// Enable Fbmask emulation excluding triangle class because it's quite slow.
+			// Also exclude fbmask emulation on texture shuffle just in case it's slow.
+			enable_fbmask_emulation = !needs_sw_blend && !m_texture_shuffle && (m_vt.m_primclass != GS_TRIANGLE_CLASS);
 			break;
 		case ACC_BLEND_NONE_D3D11:
 		default:
