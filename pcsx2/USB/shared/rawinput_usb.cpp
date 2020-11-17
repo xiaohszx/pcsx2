@@ -293,7 +293,7 @@ namespace shared
 			}
 			if (eatenWnd)
 				RegisterRaw(nullptr);
-			if (eatenWnd && eatenWndProc)
+			if (eatenWnd && eatenWndProc && GetWindowLongPtr(eatenWnd, GWLP_WNDPROC) == (LONG_PTR)RawInputProc)
 				SetWindowLongPtr(eatenWnd, GWLP_WNDPROC, (LONG_PTR)eatenWndProc);
 			eatenWndProc = nullptr;
 			eatenWnd = nullptr;
