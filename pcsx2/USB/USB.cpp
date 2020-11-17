@@ -33,6 +33,7 @@
 OHCIState* qemu_ohci = NULL;
 USBDevice* usb_device[2] = {NULL};
 bool configChanged = false;
+static bool usb_opened = false;
 
 Config conf;
 // we'll probably switch our save state system at some point to standardize in
@@ -90,8 +91,28 @@ void Reset()
 		ohci_hard_reset(qemu_ohci);
 }
 
+void OpenDevices()
+{
+	//TODO Pass pDsp to open probably so dinput can bind to this HWND
+	if (usb_device[0] && usb_device[0]->klass.open)
+		usb_device[0]->klass.open(usb_device[0] /*, pDsp*/);
+
+	if (usb_device[1] && usb_device[1]->klass.open)
+		usb_device[1]->klass.open(usb_device[1] /*, pDsp*/);
+}
+
+static void CloseDevices()
+{
+	if (usb_device[0] && usb_device[0]->klass.close)
+		usb_device[0]->klass.close(usb_device[0]);
+
+	if (usb_device[1] && usb_device[1]->klass.close)
+		usb_device[1]->klass.close(usb_device[1]);
+}
+
 void DestroyDevices()
 {
+	CloseDevices();
 	for (int i = 0; i < 2; i++)
 	{
 		if (qemu_ohci && qemu_ohci->rhport[i].port.dev)
@@ -106,7 +127,7 @@ void DestroyDevices()
 	}
 }
 
-USBDevice* CreateDevice(DeviceType index, int port)
+static USBDevice* CreateDevice(DeviceType index, int port)
 {
 	DeviceProxyBase* devProxy;
 	USBDevice* device = nullptr;
@@ -127,7 +148,7 @@ USBDevice* CreateDevice(DeviceType index, int port)
 }
 
 //TODO re-do sneaky attach
-void USBAttach(int port, USBDevice* dev, bool sneaky = false)
+static void USBAttach(int port, USBDevice* dev, bool sneaky = false)
 {
 	if (!qemu_ohci)
 		return;
@@ -148,23 +169,19 @@ void USBAttach(int port, USBDevice* dev, bool sneaky = false)
 	}
 }
 
-USBDevice* CreateDevice(const std::string& name, int port)
+static USBDevice* CreateDevice(const std::string& name, int port)
 {
-	DeviceProxyBase* devProxy;
 	USBDevice* device = nullptr;
 
 	if (!name.empty())
 	{
-		devProxy = RegisterDevice::instance().Device(name);
+		DeviceProxyBase* devProxy = RegisterDevice::instance().Device(name);
 		if (devProxy)
 			device = devProxy->CreateDevice(port);
 		else
 			Console.WriteLn(Color_Red, "Port %d: Unknown device type", port);
 	}
 
-	if (!device)
-	{
-	}
 	return device;
 }
 
@@ -179,6 +196,9 @@ void CreateDevices()
 		usb_device[i] = CreateDevice(conf.Port[i], i);
 		USBAttach(i, usb_device[i]);
 	}
+
+	if (usb_opened)
+		OpenDevices();
 }
 
 s32 USBinit()
@@ -225,6 +245,7 @@ void USBshutdown()
 		usbLog = nullptr;
 	}
 	//#endif
+	usb_opened = false;
 }
 
 s32 USBopen(void* pDsp)
@@ -274,26 +295,16 @@ s32 USBopen(void* pDsp)
 		CreateDevices(); //TODO Pass pDsp to init?
 	}
 
-	//TODO Pass pDsp to open probably so dinput can bind to this HWND
-	if (usb_device[0] && usb_device[0]->klass.open)
-		usb_device[0]->klass.open(usb_device[0] /*, pDsp*/);
-
-	if (usb_device[1] && usb_device[1]->klass.open)
-		usb_device[1]->klass.open(usb_device[1] /*, pDsp*/);
-
+	OpenDevices(/* pDsp */);
+	usb_opened = true;
 	return 0;
 }
 
 void USBclose()
 {
-
-	if (usb_device[0] && usb_device[0]->klass.close)
-		usb_device[0]->klass.close(usb_device[0]);
-
-	if (usb_device[1] && usb_device[1]->klass.close)
-		usb_device[1]->klass.close(usb_device[1]);
-
+	CloseDevices();
 	shared::Uninitialize();
+	usb_opened = false;
 }
 
 u8 USBread8(u32 addr)
@@ -367,6 +378,8 @@ s32 USBfreeze(int mode, freezeData* data)
 		//TODO Subsequent save state loadings make USB "stall" for n seconds since previous load
 		//clocks = usbd.cycles;
 		//remaining = usbd.remaining;
+
+		CloseDevices();
 
 		for (uint32_t i = 0; i < qemu_ohci->num_ports; i++)
 		{
@@ -493,6 +506,8 @@ s32 USBfreeze(int mode, freezeData* data)
 		{
 			return -1;
 		}
+
+		OpenDevices();
 	}
 	//TODO straight copying of structs can break cross-platform/cross-compiler save states 'cause padding 'n' stuff
 	else if (mode == FREEZE_SAVE)
