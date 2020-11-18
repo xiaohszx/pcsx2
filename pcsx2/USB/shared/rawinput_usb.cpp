@@ -30,7 +30,6 @@ namespace shared
 
 		static std::vector<ParseRawInputCB*> callbacks;
 
-		HWND msgWindow = nullptr;
 		WNDPROC eatenWndProc = nullptr;
 		HWND eatenWnd = nullptr;
 		HHOOK hHook = nullptr, hHookWnd = nullptr, hHookKB = nullptr;
@@ -114,7 +113,6 @@ namespace shared
 
 		static int RegisterRaw(HWND hWnd)
 		{
-			msgWindow = hWnd;
 			RAWINPUTDEVICE Rid[4];
 			Rid[0].usUsagePage = 0x01;
 			Rid[0].usUsage = HID_USAGE_GENERIC_GAMEPAD;
