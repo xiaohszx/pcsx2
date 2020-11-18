@@ -23,6 +23,7 @@
 #include "R5900OpcodeTables.h"
 #include "R5900Exceptions.h"
 #include "GS.h"
+#include "CDVD/CDVD.h"
 
 GS_VideoMode gsVideoMode = GS_VideoMode::Uninitialized;
 bool gsIsInterlaced = false;
@@ -942,7 +943,18 @@ void SYSCALL()
 					DevCon.Warning("Set GS CRTC configuration. %s %s (%s)",mode.c_str(), inter, field);
 				}
 				break;
-
+		case Syscall::GetOSParamConfig:
+		{
+			u8* pointer = (u8*)PSM(cpuRegs.GPR.n.a0.UL[0]);
+			u8 params[16];
+			
+			cdvdReadLanguageParams(params);
+			u32 osdconf = (u32)(((params[1] & 0xf) << 4) | ((params[1] & 0xf0) >> 4)) << 12;
+			
+			memcpy(pointer, &osdconf, 4);
+			return;
+			}
+		break;
 		case Syscall::SetVTLBRefillHandler:
 			DevCon.Warning("A tlb refill handler is set. New handler %x", (u32*)PSM(cpuRegs.GPR.n.a1.UL[0]));
 			break;
