@@ -261,7 +261,7 @@ static void cdvdWriteMAC(const u8* num)
 
 void cdvdReadLanguageParams(u8* config)
 {
-	getNvmData(config, 0x10, 16, offsetof(NVMLayout, config1));
+	getNvmData(config, 0xF, 16, offsetof(NVMLayout, config1));
 }
 
 s32 cdvdReadConfig(u8* config)
